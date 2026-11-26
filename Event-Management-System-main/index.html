@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventFlow | Event Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">E</div>
+                <span>EventFlow</span>
+                <button class="close-sidebar" id="closeSidebar">×</button>
+            </div>
+
+            <div class="sidebar-label">MENU</div>
+
+            <nav>
+                <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                    <span>▦</span> Dashboard
+                </a>
+                <a href="#events" class="nav-link" data-page="events">
+                    <span>▣</span> All Events
+                </a>
+                <a href="#registrations" class="nav-link" data-page="registrations">
+                    <span>♧</span> Registrations
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-label">SYSTEM</div>
+                <a href="#settings" class="nav-link" data-page="settings">
+                    <span>⚙</span> Settings
+                </a>
+                <div class="profile">
+                    <div class="avatar">A</div>
+                    <div>
+                        <strong>Admin User</strong>
+                        <small>Administrator</small>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <header class="topbar">
+                <div class="top-left">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <div>
+                        <h2 id="pageTitle">Dashboard</h2>
+                        <p id="pageSubtitle">Welcome back! Here's what's happening.</p>
+                    </div>
+                </div>
+
+
+                <div class="top-actions">
+                    <span class="date-display" id="todayDate"></span>
+
+                    <button class="theme-toggle" id="themeToggle"
+                            aria-label="Switch color theme"
+                            title="Switch theme">
+                        <span id="themeIcon">☾</span>
+                    </button>
+
+                    <button class="primary-btn" id="headerAddBtn">
+                        ＋ Create Event
+                    </button>
+                </div>
+
+            </header>
+
+            <div class="content">
+
+                <!-- Dashboard -->
+                <section class="page active" id="dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-top">
+                                <span>Total Events</span>
+                                <span class="stat-icon purple">▣</span>
+                            </div>
+                            <h2 id="totalEvents">0</h2>
+                            <small>Events in your system</small>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-top">
+                                <span>Upcoming Events</span>
+                                <span class="stat-icon blue">◷</span>
+                            </div>
+                            <h2 id="upcomingEvents">0</h2>
+                            <small>Scheduled events</small>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-top">
+                                <span>Registrations</span>
+                                <span class="stat-icon green">♧</span>
+                            </div>
+                            <h2 id="totalRegistrations">0</h2>
+                            <small>Total attendees registered</small>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-top">
+                                <span>Revenue</span>
+                                <span class="stat-icon orange">₹</span>
+                            </div>
+                            <h2 id="totalRevenue">₹0</h2>
+                            <small>From paid registrations</small>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h3>Recent Events</h3>
+                                    <p>Your latest event activities</p>
+                                </div>
+                                <button class="text-btn" data-goto="events">View All →</button>
+                            </div>
+                            <div id="recentEvents"></div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h3>Event Categories</h3>
+                                    <p>Distribution of events</p>
+                                </div>
+                            </div>
+                            <div id="categoryStats" class="category-stats"></div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h3>Quick Actions</h3>
+                                <p>Manage your events quickly</p>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="quick-action" id="quickAdd">
+                                <span>＋</span>
+                                <strong>Create Event</strong>
+                                <small>Add a new event</small>
+                            </button>
+                            <button class="quick-action" data-goto="events">
+                                <span>▣</span>
+                                <strong>Manage Events</strong>
+                                <small>View and edit events</small>
+                            </button>
+                            <button class="quick-action" data-goto="registrations">
+                                <span>♧</span>
+                                <strong>View Registrations</strong>
+                                <small>Manage attendees</small>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- All Events -->
+                <section class="page" id="events">
+                    <div class="section-toolbar">
+                        <div>
+                            <h3>All Events</h3>
+                            <p>Manage and organize your events.</p>
+                        </div>
+                        <button class="primary-btn" id="addEventBtn">＋ Add New Event</button>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="search" id="eventSearch" placeholder="Search events...">
+                        <select id="categoryFilter">
+                            <option value="All">All Categories</option>
+                            <option>Technology</option>
+                            <option>Education</option>
+                            <option>Music</option>
+                            <option>Sports</option>
+                            <option>Business</option>
+                            <option>Other</option>
+                        </select>
+                        <select id="statusFilter">
+                            <option value="All">All Status</option>
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="events-grid" id="eventsGrid"></div>
+                </section>
+
+                <!-- Registrations -->
+                <section class="page" id="registrations">
+                    <div class="section-toolbar">
+                        <div>
+                            <h3>Registrations</h3>
+                            <p>View and manage event participants.</p>
+                        </div>
+                        <span class="result-count" id="registrationCount">0 registrations</span>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="search" id="registrationSearch"
+                               placeholder="Search participants...">
+                        <select id="registrationEventFilter">
+                            <option value="All">All Events</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Participant</th>
+                                    <th>Email</th>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                    <th>Tickets</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrationTable"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings -->
+                <section class="page" id="settings">
+                    <div class="panel settings-panel">
+                        <h3>Application Settings</h3>
+                        <p>Manage your EventFlow application.</p>
+
+                        <div class="setting-row">
+                            <div>
+                                <strong>Storage Information</strong>
+                                <small>Your data is stored locally in this browser.</small>
+                            </div>
+                            <span class="status-pill">Local Storage</span>
+                        </div>
+
+                        <div class="setting-row">
+                            <div>
+                                <strong>Export Application Data</strong>
+                                <small>Download your events and registrations as JSON.</small>
+                            </div>
+                            <button class="secondary-btn" id="exportBtn">Export Data</button>
+                        </div>
+
+                        <div class="setting-row">
+                            <div>
+                                <strong>Reset Application</strong>
+                                <small>Restore sample data and clear your changes.</small>
+                            </div>
+                            <button class="danger-btn" id="resetBtn">Reset Data</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h3 id="eventModalTitle">Create New Event</h3>
+                    <p>Enter the event information below.</p>
+                </div>
+                <button class="modal-close" data-close="eventModal">×</button>
+            </div>
+
+            <form id="eventForm">
+                <input type="hidden" id="editEventId">
+
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label>Event Title *</label>
+                        <input type="text" id="eventTitle" required maxlength="80"
+                               placeholder="Enter event name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="eventCategory" required>
+                            <option value="">Select category</option>
+                            <option>Technology</option>
+                            <option>Education</option>
+                            <option>Music</option>
+                            <option>Sports</option>
+                            <option>Business</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Date *</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start Time *</label>
+                        <input type="time" id="eventTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Venue *</label>
+                        <input type="text" id="eventVenue" required maxlength="100"
+                               placeholder="Enter venue">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ticket Price (₹) *</label>
+                        <input type="number" id="eventPrice" min="0" max="1000000"
+                               step="1" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Maximum Participants *</label>
+                        <input type="number" id="eventCapacity" min="1" max="100000"
+                               value="100" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description *</label>
+                        <textarea id="eventDescription" required maxlength="500"
+                                  placeholder="Describe your event..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="secondary-btn"
+                            data-close="eventModal">Cancel</button>
+                    <button type="submit" class="primary-btn" id="saveEventBtn">
+                        Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Event Details</h3>
+                <button class="modal-close" data-close="detailsModal">×</button>
+            </div>
+            <div id="eventDetails"></div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="registrationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h3>Register for Event</h3>
+                    <p>Enter participant information.</p>
+                </div>
+                <button class="modal-close" data-close="registrationModal">×</button>
+            </div>
+
+            <form id="registrationForm">
+                <input type="hidden" id="registrationEventId">
+
+                <div class="form-group">
+                    <label>Participant Name *</label>
+                    <input type="text" id="participantName" required maxlength="70">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="participantEmail" required maxlength="120">
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Tickets *</label>
+                    <input type="number" id="ticketQuantity" value="1"
+                           min="1" max="10" required>
+                </div>
+
+                <div class="price-summary" id="priceSummary">Total: ₹0</div>
+
+                <div class="modal-footer">
+                    <button type="button" class="secondary-btn"
+                            data-close="registrationModal">Cancel</button>
+                    <button type="submit" class="primary-btn">Confirm Registration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
